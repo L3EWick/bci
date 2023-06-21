@@ -1,5 +1,5 @@
-import 'package:bci/pages/home_page.dart';
-import 'package:bci/pages/login_page.dart';
+import 'package:bci/screen/home_page.dart';
+import 'package:bci/screen/login/login_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => LoginPage(),
-        '/home': (context) => HomePage(),
+        '/home': (context) => HomeScreen(),
       },
     );
   }

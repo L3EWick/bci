@@ -1,0 +1,53 @@
+import 'package:flutter/material.dart';
+
+import 'package:bci/screen/formulario/novo_formulario_page.dart';
+import 'formulario/formulario.dart';
+import 'package:bci/screen/utils/drawer_list.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  // ];
+  static final List<Widget> _widgetOptions = <Widget>[
+    const FormularioPage(),
+    const NovoFormularioPage(),
+  ];
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+       appBar: AppBar(
+            centerTitle: true,
+            title: Text("BCI"),
+            backgroundColor: Colors.deepPurple[900]),
+       drawer: DrawerList(),
+           
+
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Formulários'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home), label: 'Novo Formulário'),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.purple[800],
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
