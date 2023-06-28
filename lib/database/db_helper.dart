@@ -1,3 +1,4 @@
+
 import 'package:sqflite/sqflite.dart' as sql;
 
 class SQLHelper{
@@ -5,6 +6,8 @@ class SQLHelper{
     await database.execute("""
       CREATE TABLE data(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        latitude REAL,
+        longitude REAL,
         requerente TEXT,
         endereco TEXT,
         bairro TEXT,
@@ -32,6 +35,7 @@ class SQLHelper{
         selectrevestimento TEXT,
         selectcobertura TEXT,
         selectestrutura TEXT,
+        
         createdAT TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       )
 """);
@@ -46,38 +50,42 @@ class SQLHelper{
       });
   }
 
-  static Future<int> createData(String? requerente, 
-                                String? endereco,
-                                String? bairro,
-                                String? telefone,
-                                String? attold,
-                                String? att,
-                                String? atcold,
-                                String? processnumber,
-                                String? contribuinte,
-                                String? proprietario,
-                                String? lote,
-                                String? uso,
-                                String? concervacao,
-                                String? revestimento,
-                                String? cobertura,
-                                String? estrutura,
-                                String? complemento,
-                                String? unidades,
-                                String? selectlote,
-                                String? selectnumunid,
-                                String? selectrelevo,
-                                String? selectmuro,
-                                String? selectuso,
-                                String? selectconservacao,
-                                String? selectrevestimento,
-                                String? selectcobertura,
-                                String? selectestrutura
+  static Future<int> createData(String requerente, 
+                                String endereco,
+                                String bairro,
+                                String telefone,
+                                String attold,
+                                String att,
+                                String atcold,
+                                String processnumber,
+                                String contribuinte,
+                                String proprietario,
+                                String lote,
+                                String uso,
+                                String concervacao,
+                                String revestimento,
+                                String cobertura,
+                                String estrutura,
+                                String complemento,
+                                String unidades,
+                                String selectlote,
+                                String selectnumunid,
+                                String selectrelevo,
+                                String selectmuro,
+                                String selectuso,
+                                String selectconservacao,
+                                String selectrevestimento,
+                                String selectcobertura,
+                                String selectestrutura,
+                                double latitude,
+                                double longitude
                               ) 
   async{
     final db = await SQLHelper.db();
 
     final data = {
+      'latitude'            : latitude,
+      'longitude'            : longitude, 
       'requerente'          : requerente, 
       'endereco'            : endereco,
       'bairro'              : bairro,
@@ -104,6 +112,7 @@ class SQLHelper{
       'selectrevestimento'  : selectrevestimento,
       'selectcobertura'     : selectcobertura, 
       'selectestrutura'     : selectestrutura, 
+      
 
       };
     final id = await db.insert('data', data,conflictAlgorithm: sql.ConflictAlgorithm.replace);
@@ -149,7 +158,9 @@ class SQLHelper{
                                 String? selectconservacao,
                                 String? selectrevestimento,
                                 String? selectcobertura,
-                                String? selectestrutura) 
+                                String? selectestrutura,
+                             
+                                ) 
     async{
 
     final db = await SQLHelper.db();

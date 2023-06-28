@@ -36,6 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late dynamic _latitude;
   late dynamic _longitude;
 
+  
+
   Future pegaLocaliza() async {
     var location = Location();
     if (!await location.serviceEnabled()) {
@@ -51,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
     var loc = await location.getLocation();
-    // print("${loc.latitude} ${loc.longitude}");
+    print("${loc.latitude} ${loc.longitude}");
 
     _latitude = loc.latitude;
     _longitude = loc.longitude;
@@ -87,6 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
       _mySelectionRevestimento,
       _mySelectionCobertura,
       _mySelectionEstrutura,
+      _latitude,
+      _longitude,
     );
     _refreshData();
   }
@@ -213,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void showBottomSheet(int? id) async {
     if (id != null) {
-      final existingData =
+      final existingData = 
           _allData.firstWhere((element) => element['id'] == id);
       _tRequerente.text = existingData['requerente'];
       _tEndereco.text = existingData['endereco'];
@@ -242,7 +246,11 @@ class _HomeScreenState extends State<HomeScreen> {
       _mySelectionRevestimento = existingData['selectrevestimento'];
       _mySelectionCobertura = existingData['selectcobertura'];
       _mySelectionEstrutura = existingData['selectestrutura'];
+      _latitude             = existingData['latitude'];
+      _longitude            = existingData['longitude'];  
+      
     }
+    
 
     showModalBottomSheet(
       elevation: 5,
@@ -348,17 +356,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(Icons.supervisor_account_sharp)),
             ),
             const SizedBox(height: 8),
-            TextFormField(
-              controller: _tEndereco,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              decoration: InputDecoration(
-                hintText: 'Endereço',
-                labelText: 'Endereço',
-                icon: Icon(Icons.add_location_rounded),
-              ),
-            ),
-            const SizedBox(height: 8),
+            // TextFormField(
+            //   controller: _tEndereco,
+            //   keyboardType: TextInputType.multiline,
+            //   maxLines: null,
+            //   decoration: InputDecoration(
+            //     hintText: 'Endereço',
+            //     labelText: 'Endereço',
+            //     icon: Icon(Icons.add_location_rounded),
+            //   ),
+            // ),
+            // const SizedBox(height: 8),
             TextFormField(
               controller: _tBairro,
               keyboardType: TextInputType.multiline,
@@ -369,6 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(Icons.add_home_work_rounded),
               ),
             ),
+          
             const SizedBox(height: 8),
             TextFormField(
               controller: _tTelefone,
@@ -681,8 +690,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+        
+       
+
+
+
     return Scaffold(
       backgroundColor: const Color(0xffefeceaf4),
       appBar: AppBar(
@@ -695,53 +711,88 @@ class _HomeScreenState extends State<HomeScreen> {
               child: CircularProgressIndicator(),
             )
           : ListView.builder(
+
               itemCount: _allData.length,
-              itemBuilder: (context, index) => Card(
-                margin: const EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    Row(children: [
-                      Container(
-                     height: 245,
-                      child: Image.asset('assets/img/maps.jpg')),
-                      ],),
-                    ListTile(
-                      title: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          _allData[index]['att'],
-                          style: const TextStyle(
-                            fontSize: 20,
-                          ),
+              itemBuilder: (context, index) => 
+              
+              
+               Container(
+                
+                child: Card(
+              
+                  margin: const EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      Row(children: [
+                        Container(
+                       height: 230,
+                        child:Image(
+
+                              width: 330,
+                              image: NetworkImage(
+                                  
+                                  'https://maps.googleapis.com/maps/api/staticmap?markers=&markers=color:red%7Clabel:L%7C${_allData[index]['latitude'].toString()}%2C%20${_allData[index]['longitude']}&size=500x308&key=AIzaSyBULdGH7x38Ag6zYzKiywRKlpJMs6LfMf4'),
+                              // fit: BoxFit.cover, fica a imagem toda, mas corta o top e bot
+                              fit: BoxFit.fill,
+                            ),
+                        
+                        ),
+                        ],),
+                      ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 1),
+                          child: 
+                              Column(
+                                children: [
+                                    ListTile(
+                                        title: Text('Nº Processo'),
+                                        subtitle: Text(
+                                          _allData[index]['processnumber'],
+                                          style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                                        ),
+                                    ),
+                                    ListTile(
+                                        title: Text('Requerente'),
+                                        subtitle: Text(
+                                          _allData[index]['requerente'],
+                                          style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                                        ),
+                                    )
+                                ],
+                                ),
+                           
+                       
+                              
+                            ),
+                        
+                          
+                       trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                showBottomSheet(_allData[index]['id']);
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Colors.indigo,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                _deleteData(_allData[index]['id']);
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      subtitle: Text(_allData[index]['requerente']),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              showBottomSheet(_allData[index]['id']);
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.indigo,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              _deleteData(_allData[index]['id']);
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    
-                  ],
+                      
+                    ],
+                  ),
                 ),
               ),
             ),
