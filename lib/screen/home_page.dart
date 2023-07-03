@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bci/database/db_helper.dart';
 import 'package:bci/screen/utils/drawer_list.dart';
 import 'package:location/location.dart';
+import 'package:form_builder_image_picker/form_builder_image_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +13,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, dynamic>> _allData = [];
+  
 
   bool _isLoading = true;
 
@@ -638,6 +640,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 value: _mySelectionCobertura),
 
+            const SizedBox(
+              height: 30,
+            ),
+
+          Text(
+                  'FOTOS DA UNIDADE',
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 10),
+                ),
+            FormBuilderImagePicker(
+              name: 'photos',
+              decoration: const InputDecoration(labelText: 'Fotos da Unidade'),
+              maxImages: 5,
+            ),
             const SizedBox(
               height: 30,
             ),
